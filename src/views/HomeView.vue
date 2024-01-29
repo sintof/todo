@@ -1,12 +1,29 @@
 <script setup>
 import TodoCreator from '@/components/TodoCreator.vue';
 import TodoItem from '@/components/TodoItem.vue';
-import { provide, reactive, ref } from 'vue';
+import { onUnmounted, provide, reactive, ref } from 'vue';
 import { uid } from 'uid';
 
+const getSavedTodos = () => {
+  const savedTodos = localStorage.getItem('todos')
+  if (savedTodos) {
+    todoList.push(...JSON.parse(savedTodos))
+  }
+}
+
 const todoList = reactive([]);
+getSavedTodos()
 provide('todoList', todoList)
 const err = ref(false);
+
+const saveTodos = () => {
+  localStorage.setItem('todos', JSON.stringify(todoList))
+}
+
+
+onUnmounted(() => {
+  saveTodos()
+})
 
 const createTodo = (todo) => {
   if (todo.trim() !== '') {

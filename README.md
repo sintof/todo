@@ -17,3 +17,5 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Try it by yourself: https://todo-1-b9650045.deta.app/

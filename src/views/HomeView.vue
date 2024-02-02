@@ -1,73 +1,28 @@
 <script setup>
 import TodoCreator from '@/components/TodoCreator.vue';
 import TodoItem from '@/components/TodoItem.vue';
-import { onUnmounted, provide, reactive, ref } from 'vue';
-import { uid } from 'uid';
-
-const getSavedTodos = () => {
-  const savedTodos = localStorage.getItem('todos')
-  if (savedTodos) {
-    todoList.push(...JSON.parse(savedTodos))
-  }
-}
-
-const todoList = reactive([]);
-getSavedTodos()
-provide('todoList', todoList)
-const err = ref(false);
-
-const saveTodos = () => {
-  localStorage.setItem('todos', JSON.stringify(todoList))
-}
+import { useTodoStore } from '@/stores/todoStore';
+import { onBeforeUnmount } from 'vue';
 
 
-onUnmounted(() => {
-  saveTodos()
-})
+const todoStore = useTodoStore();
+todoStore.getSavedTodos()
 
-const createTodo = (todo) => {
-  if (todo.trim() !== '') {
-    todoList.push({
-      id: uid(),
-      text: todo,
-      isCompleted: false,
-      isEditing: null
-      })
-    err.value = false
-  } else {
-    err.value = true;
-  }
-}
-
-const toggleCompleted = (id) => {
-  const index = todoList.findIndex((todo) => todo.id === id)
-  todoList[index].isCompleted = !todoList[index].isCompleted
-}
-
-const editTodo = (id) => {
-  const index = todoList.findIndex((todo) => todo.id === id)
-  todoList[index].isEditing = !todoList[index].isEditing
-}
-
-const deleteTodo = (id) => {
-  const index = todoList.findIndex((todo) => todo.id === id)
-  todoList.splice(index, 1)
+onbeforeunload = () => {
+  todoStore.saveTodos()
 }
 </script>
 
 <template>
   <main>
     <h1>Create Todo</h1>
-    <TodoCreator @create-todo="createTodo($event)" :err="err"/>
+    <TodoCreator />
     <div>
       <ul class="todo-list">
         <TodoItem
-        v-for="todo in todoList"
+        v-for="todo in todoStore.todoList"
         :key="todo.id"
-        :todo="todo"
-        :toogleCompleted="toggleCompleted"
-        :editTodo="editTodo"
-        :deleteTodo="deleteTodo" />
+        :id="todo.id" />
       </ul>
     </div>
   </main>

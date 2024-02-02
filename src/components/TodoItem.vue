@@ -2,7 +2,8 @@
     <div class="todoItem" :class="{ 'isCompleted': todo.isCompleted }">
         <input
             type="checkbox"
-            @click="toogleCompleted(todo.id)">
+            checked="todo.isCompleted"
+            @click="tgleCompleted(todo.id)">
         <p
         v-if="!todo.isEditing"
         line-clamp="2"
@@ -25,12 +26,31 @@
 </template>
 
 <script setup>
+import { reactive } from 'vue'
+import { useTodoStore } from '@/stores/todoStore'
+import { storeToRefs } from 'pinia';
+
 const props = defineProps({
-    todo: Object,
-    toogleCompleted: Function,
-    editTodo: Function,
-    deleteTodo: Function
+    id: String
 })
+const todoStore = useTodoStore()
+const { todoList } = storeToRefs(todoStore)
+const todo = reactive(todoStore.getTodoById(props.id))
+
+const tgleCompleted = (id) => {
+  const index = todoList.value.findIndex((todo) => todo.id === id)
+  todoList.value[index].isCompleted = !todoList.value[index].isCompleted
+}
+
+const editTodo = (id) => {
+  const index = todoList.value.findIndex((todo) => todo.id === id)
+  todoList.value[index].isEditing = !todoList.value[index].isEditing
+}
+
+const deleteTodo = (id) => {
+  const index = todoList.value.findIndex((todo) => todo.id === id)
+  todoList.value.splice(index, 1)
+}
 </script>
 
 <style>

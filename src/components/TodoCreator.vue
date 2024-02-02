@@ -1,27 +1,23 @@
 <template>
     <div>
-        <div :class="{ 'input-err': err }" class="input-wrap">
+        <div :class="{ 'input-err': todoStore.err }" class="input-wrap">
             <input 
             type="text"
-            v-model="todo" 
-            @keydown.exact.enter="$emit('create-todo', todo), todo = ''"
+            v-model="todo"
+            @keydown.exact.enter="todoStore.createTodo(todo), todo = ''"
             maxlength="50">
-            <button @click="$emit('create-todo', todo), todo = ''">Create</button>
+            <button @click="todoStore.createTodo(todo), todo = ''">Create</button>
         </div>
     </div>
-    <sub class="err" v-if="err">Todo cannot be empty</sub>
+    <sub class="err" v-if="todoStore.err">Todo cannot be empty</sub>
 </template>
 
 <script setup>
 import { ref } from "vue"
+import { useTodoStore } from "@/stores/todoStore";
 
+const todoStore = useTodoStore();
 const todo = ref('')
-
-defineProps({
-  err: Boolean
-})
-
-const emit = defineEmits(['create-todo'])
 
 </script>
 

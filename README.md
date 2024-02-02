@@ -1,4 +1,4 @@
-#Simple ToDo app in Vue js
+# Simple ToDo app in Vue js
 
 ## Project Setup
 

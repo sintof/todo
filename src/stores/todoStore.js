@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref, reactive } from "vue";
+import { ref, reactive } from "vue";
 import { uid } from 'uid';
 
 export const useTodoStore = defineStore("todo", () => {

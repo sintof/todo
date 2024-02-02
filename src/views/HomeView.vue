@@ -2,8 +2,6 @@
 import TodoCreator from '@/components/TodoCreator.vue';
 import TodoItem from '@/components/TodoItem.vue';
 import { useTodoStore } from '@/stores/todoStore';
-import { onBeforeUnmount } from 'vue';
-
 
 const todoStore = useTodoStore();
 todoStore.getSavedTodos()

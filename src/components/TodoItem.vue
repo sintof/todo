@@ -2,7 +2,7 @@
     <div class="todoItem" :class="{ 'isCompleted': todo.isCompleted }">
         <input
             type="checkbox"
-            checked="todo.isCompleted"
+            :checked="todo.isCompleted"
             @click="tgleCompleted(todo.id)">
         <p
         v-if="!todo.isEditing"
